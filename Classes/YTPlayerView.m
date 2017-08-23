@@ -218,10 +218,12 @@ NSString static *const kYTPlayerSyndicationRegexPattern = @"^https://tpc.googles
                    startSeconds:(float)startSeconds
                suggestedQuality:(YTPlaybackQuality)suggestedQuality {
   NSString *playlistIdString = [NSString stringWithFormat:@"'%@'", playlistId];
-  [self cuePlaylist:playlistIdString
-                 index:index
-          startSeconds:startSeconds
-      suggestedQuality:suggestedQuality];
+  NSNumber *indexValue = [NSNumber numberWithInt:index];
+  NSNumber *startSecondsValue = [NSNumber numberWithFloat:startSeconds];
+  NSString *qualityValue = [YTPlayerView stringForPlaybackQuality:suggestedQuality];
+  NSString *command = [NSString stringWithFormat:@"player.cuePlaylist({listType: 'playlist', list: %@,index: %@, startSeconds: %@, suggestedQuality: '%@'});",
+                       playlistIdString, indexValue, startSecondsValue, qualityValue];
+  [self stringFromEvaluatingJavaScript:command];
 }
 
 - (void)cuePlaylistByVideos:(NSArray *)videoIds
@@ -239,10 +241,12 @@ NSString static *const kYTPlayerSyndicationRegexPattern = @"^https://tpc.googles
                     startSeconds:(float)startSeconds
                 suggestedQuality:(YTPlaybackQuality)suggestedQuality {
   NSString *playlistIdString = [NSString stringWithFormat:@"'%@'", playlistId];
-  [self loadPlaylist:playlistIdString
-                 index:index
-          startSeconds:startSeconds
-      suggestedQuality:suggestedQuality];
+  NSNumber *indexValue = [NSNumber numberWithInt:index];
+  NSNumber *startSecondsValue = [NSNumber numberWithFloat:startSeconds];
+  NSString *qualityValue = [YTPlayerView stringForPlaybackQuality:suggestedQuality];
+  NSString *command = [NSString stringWithFormat:@"player.loadPlaylist({listType: 'playlist', list: %@, index: %@, startSeconds: %@, suggestedQuality: '%@'});",
+                       playlistIdString, indexValue, startSecondsValue, qualityValue];
+  [self stringFromEvaluatingJavaScript:command];
 }
 
 - (void)loadPlaylistByVideos:(NSArray *)videoIds
